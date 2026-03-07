@@ -75,7 +75,12 @@ public class RandomFileClass {
             }
             */
 
-            student.add(new Student(arrayName[randomName],randomGrade,randomeGradebookNumber));
+            //student.add(new Student(arrayName[randomName],randomGrade,randomeGradebookNumber));
+            student.add(new Student.Builder()
+                    .name(arrayName[randomName])
+                    .grade(randomGrade)
+                    .gradebookNumber(randomeGradebookNumber)
+                    .build());
         }
         student.forEach(System.out::println);
 

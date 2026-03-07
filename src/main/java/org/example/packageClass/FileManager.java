@@ -50,7 +50,11 @@ public class FileManager implements FileProcessor {
                         .split(";");
 
                 try {
-                    student.add(new Student(linesBuffer[0], Integer.parseInt(linesBuffer[1]), Integer.parseInt(linesBuffer[2])));
+                    student.add(new Student.Builder()
+                            .name(linesBuffer[0])
+                            .grade(Double.parseDouble(linesBuffer[1]))
+                            .gradebookNumber(Integer.parseInt(linesBuffer[2]))
+                            .build());
                 }
                 catch (NumberFormatException e) {
                     System.err.println("Ошибка при чтении данных из файла!\nПроверьте корректность данных в исходном файле " + e.getMessage());
