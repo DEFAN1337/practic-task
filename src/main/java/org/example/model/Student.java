@@ -14,11 +14,6 @@ public class Student {
         this.grade = builder.grade;
     }
 
-    public Student(String name, int grade, int gradebookNumber) {
-        this.name = name;
-        this.grade = grade;
-        this.gradebookNumber = gradebookNumber;
-    }
 
     public String getName() {
         return name;
