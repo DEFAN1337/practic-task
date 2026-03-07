@@ -11,7 +11,7 @@ public final class StudentValidator {
     }
 
     private static void validateGrade(double grade) {
-        if (grade < 2) {
+        if (grade < 0) {
             throw new ValidationException("Средний балл не может быть меньше 2.0");
         }
         if (grade > 5) {

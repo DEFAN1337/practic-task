@@ -1,4 +1,4 @@
-package org.example.packageClass;
+package org.example.packageSort;
 
 import org.example.model.Student;
 import org.example.packageInterface.SortProcessor;

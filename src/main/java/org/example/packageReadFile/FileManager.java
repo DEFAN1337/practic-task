@@ -1,4 +1,4 @@
-package org.example.packageClass;
+package org.example.packageReadFile;
 
 import org.example.menu.MenuConstructorClass;
 import org.example.model.Student;
