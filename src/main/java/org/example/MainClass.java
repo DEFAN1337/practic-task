@@ -1,4 +1,4 @@
-package org.example.packageClass;
+package org.example;
 
 import org.example.menu.MenuConstructorClass;
 

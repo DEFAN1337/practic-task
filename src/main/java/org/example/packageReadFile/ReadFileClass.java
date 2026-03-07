@@ -1,15 +1,16 @@
-package org.example.packageClass;
+package org.example.packageReadFile;
 
 import org.example.menu.MenuConstructorClass;
 import org.example.model.Student;
 import org.example.packageInterface.FileProcessor;
+import org.example.packageReadFile.FileManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class ReadFileClass {
+public class ReadFileClass extends FileManager {
 
     public static void readFile() throws IOException {
 

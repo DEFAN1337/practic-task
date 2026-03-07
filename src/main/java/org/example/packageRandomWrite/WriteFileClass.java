@@ -1,7 +1,6 @@
-package org.example.packageClass;
+package org.example.packageRandomWrite;
 
 import org.example.menu.MenuConstructorClass;
-import org.example.model.Student;
 
 import java.io.FileWriter;
 import java.io.IOException;

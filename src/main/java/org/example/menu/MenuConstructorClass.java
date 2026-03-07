@@ -1,10 +1,12 @@
 package org.example.menu;
 
 import org.example.model.Student;
-import org.example.packageClass.*;
+import org.example.packageRandomWrite.*;
 import org.example.packageInterface.*;
+import org.example.packageReadFile.FileManager;
+import org.example.packageReadFile.ReadFileClass;
+import org.example.packageSort.SortedClass;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
@@ -161,17 +163,17 @@ public class MenuConstructorClass {
             String menu = scanner.nextLine();
             switch (menu) {
                 case "yes":
-                    System.out.println("Введите название файла:");
-                    File oldFile = new File("temp_sorted.txt");
-                    String fileName = scanner.nextLine();
-                    File newFile = new File(fileName + ".txt");
-                    newFile.delete();
-                    oldFile.renameTo(newFile);
-                    oldFile.delete();
+//                    System.out.println("Введите название файла:");
+//                    File oldFile = new File("temp_sorted.txt");
+//                    String fileName = scanner.nextLine();
+//                    File newFile = new File(fileName + ".txt");
+//                    newFile.delete();
+//                    oldFile.renameTo(newFile);
+//                    oldFile.delete();
                     break;
                 case "no":
-                    File file = new File("temp_sorted.txt");
-                    file.delete();
+//                    File file = new File("temp_sorted.txt");
+//                    file.delete();
                     break;
                 default:
                     System.out.println("\nНеверная команда, попробуйте снова...");
