@@ -2,18 +2,16 @@ package org.example.model;
 
 import org.example.validation.StudentValidator;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class Student {
     private final String name;
     private final int gradebookNumber;
-    private final List<Grade> grades;
+    private final double grade;
 
     public Student(Builder builder) {
         this.name = builder.name;
         this.gradebookNumber = builder.gradebookNumber;
-        this.grades = builder.grades == null ? List.of() : List.copyOf(builder.grades);
+        this.grade = builder.grade;
     }
 
     public String getName() {
@@ -24,20 +22,32 @@ public class Student {
         return gradebookNumber;
     }
 
-    public List<Grade> getGrades() {
-        return grades;
+    public double getGrade() {
+        return grade;
     }
 
     @Override
     public String toString() {
-        return "Имя студента: " +name + "; Номер зачетной книжки: " + gradebookNumber + "; Оценки: " + grades;
+        return "Имя студента: " +name + "; Номер зачетной книжки: " + gradebookNumber + "; Сред.бал: " + grade;
 
     }
 
     public static class Builder {
         private String name;
         private int gradebookNumber;
-        private List<Grade> grades;
+        private double grade;
+
+        public String getName() {
+            return name;
+        }
+
+        public double getGrade() {
+            return grade;
+        }
+
+        public int getGradebookNumber() {
+            return gradebookNumber;
+        }
 
         public Builder name(String name) {
             this.name = name;
@@ -49,31 +59,8 @@ public class Student {
             return this;
         }
 
-        //Добавить одну оценку
-        public Builder addGrade(String subject, int value) {
-            if (this.grades == null) {
-                this.grades = new ArrayList<>();
-            }
-            Grade gradeStudent = new Grade.Builder()
-                    .subject(subject)
-                    .value(value)
-                    .build();
-            this.grades.add(gradeStudent);
-            return this;
-        }
-
-        //Добавить несколько оценок
-        public Builder addGrades(List<Grade> grades) {
-            if (this.grades == null) {
-                this.grades = new ArrayList<>();
-            }
-            this.grades.addAll(grades);
-            return this;
-        }
-
-        //Ссылка на список оценок
-        public Builder grades(List<Grade> grades) {
-            this.grades = new ArrayList<>(grades);
+        public Builder grade(double grade) {
+            this.grade = grade;
             return this;
         }
 
