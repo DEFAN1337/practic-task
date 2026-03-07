@@ -7,28 +7,18 @@ public class Main {
         Student student1 = new Student.Builder()
                 .name("Артем")
                 .gradebookNumber(12345)
-                .addGrade("Математика",5)
-                .addGrade("Физика", 4)
+                .grade(4.0)
                 .build();
 
         System.out.println(student1.getName());
         System.out.println(student1.toString());
-        System.out.println(student1.getGrades());
+        System.out.println(student1.getGrade());
 
         Student student2 = new Student.Builder()
                 .name("Артем")
                 .gradebookNumber(12345)
-                .addGrade("Математика",5)
-                //.addGrade("Физика", 10)
+                .grade(10)
                 .build();
-
-        Student student3 = new Student.Builder()
-                .name("Артем")
-                .addGrade("Математика",5)
-                .addGrade("Физика", 3)
-                .build();
-
-        System.out.println(student3.getName());
 
 
     }
