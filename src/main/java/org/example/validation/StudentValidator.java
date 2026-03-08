@@ -5,17 +5,24 @@ import org.example.model.Student;
 public final class StudentValidator {
 
     public static void validate(Student.Builder builder) {
-        //будет валидация
 
-        validateGrade(builder.getGrade());
+        validateGrade(builder);
     }
 
-    private static void validateGrade(double grade) {
-        if (grade < 0) {
-            throw new ValidationException("Средний балл не может быть меньше 2.0");
+    private static void validateGrade(Student.Builder builder) {
+
+        double grade = builder.getGrade();
+
+        if (Double.isNaN(grade) || Double.isInfinite(grade)) {
+            throw new ValidationException("Средний балл имеет недопустимое значение: " + grade);
         }
-        if (grade > 5) {
-            throw new ValidationException("Средний балл не может быть больше 5.0");
+
+        if (grade < 2.0 || grade > 5.0) {
+            throw new ValidationException(
+                    "Ошибка у студента '" + builder.getName() +
+                            "'. Некорректный средний балл: " + grade +
+                            ". Допустимый диапазон: 2.0 – 5.0"
+            );
         }
     }
 }
