@@ -6,15 +6,16 @@ import java.util.regex.Pattern;
 
 public final class StudentValidator {
 
-    private static final Pattern studentNamePattern = Pattern.compile("[a-zA-Zа-яА-ЯёЁ\\s-]+");
+    private static final Pattern studentNamePattern = Pattern.compile("[a-zA-Zа-яА-ЯёЁ]+");
 
     private static final int MIN_NAME_LENGTH = 4;
 
-    private static final int MAX_NAME_LENGTH = 1000;
+    private static final int MAX_NAME_LENGTH = 100;
 
     public static void validate(Student.Builder builder) {
 
         validateName(builder.getName());
+        validateGradebookNumber(builder);
         validateGrade(builder);
     }
 
@@ -25,14 +26,6 @@ public final class StudentValidator {
         }
 
         String normalizedName = normalizeName(name);
-
-        String[] parts = normalizedName.split("\\s+");
-
-        if (parts.length < 2) {
-            throw new ValidationException(
-                    "Необходимо указать имя и фамилию. Вы ввели: " + normalizedName
-            );
-        }
 
         if (!studentNamePattern.matcher(normalizedName).matches()) {
             throw new ValidationException(
@@ -60,6 +53,19 @@ public final class StudentValidator {
         }
 
         return normalized;
+    }
+
+    private static void validateGradebookNumber(Student.Builder builder) {
+
+        int number = builder.getGradebookNumber();
+
+        if (number <= 0) {
+            throw new ValidationException(
+                    "Ошибка у студента '" + builder.getName() +
+                        "'. Номер зачетной книжки должен быть положительным. " +
+                        "Вы ввели: " + number
+            );
+        }
     }
 
     private static void validateGrade(Student.Builder builder) {
