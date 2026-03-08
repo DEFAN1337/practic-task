@@ -8,53 +8,50 @@ import org.example.packageReadFile.ReadFileClass;
 import org.example.packageSort.SortedClass;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class MenuConstructorClass {
+        private Scanner scanner;
+        private List<Student> students;
+        boolean isSorted;
+        private  FileManager fileManager;
 
-        public void selectMainMenu() throws IOException {
+        public MenuConstructorClass(){
+            //scanner  = new Scanner(System.in);
+            students = new ArrayList<>();
+            isSorted = false;
+            fileManager = new FileManager();
+        }
 
-            System.out.println("\nМеню 'Выбор ввода данных'");
-            System.out.println("\nСписок команд");
-            System.out.println("'manual_input' - ввод данных вручную");
-            System.out.println("'random_input' - ввод данных случайно");
-            System.out.println("'file_input' - ввод данных из файла");
-            System.out.println("'quit' - закрыть приложение");
-            System.out.print("Введите команду: ");
+        public void selectMainMenu() {
+            while (true){
+                //очень странное решение, но так работает
+                scanner  = new Scanner(System.in);
+                System.out.println("\nМеню 'Выбор ввода данных'");
+                System.out.println("\nСписок команд");
+                System.out.println("'manual_input' - ввод данных вручную");
+                System.out.println("'random_input' - ввод данных случайно");
+                System.out.println("'file_input' - ввод данных из файла");
+                System.out.println("'quit' - закрыть приложение");
+                //если уже считали какие-то данные
+                if(!students.isEmpty()){
+                    System.out.println("'sort_menu' - вернуться в меню 'Сортировка данных'");
+                    //если данные отсортированы, то можем их сохранить в файл
+                    if(isSorted){
+                        saveFile();
+                    }
+                }
+                System.out.print("Введите команду: ");
+                String menu = scanner.nextLine();
 
-            Scanner scanner = new Scanner(System.in);
-            String menu = scanner.nextLine();
-
-            switch (menu) {
-                case "manual_input":
-                    System.out.println("\nВы выбрали ввод данных вручную\n");
-                    WriteFileClass writeFileClass = new WriteFileClass();
-                    writeFileClass.writeFile();
-                    break;
-                case "random_input":
-                    System.out.println("\nВы выбрали ввод данных случайно");
-                    RandomFileClass randomFileClass = new RandomFileClass();
-                    randomFileClass.randomFile();
-                    break;
-                case "file_input":
-                    System.out.println("\nВы выбрали ввод данных из файла");
-                    ReadFileClass readFileClass = new ReadFileClass();
-                    readFileClass.readFile();
-                    break;
-                case "quit":
-                    System.exit(0);
-                    break;
-
-                default:
-                    System.out.println("\nНеверная команда, попробуйте снова...");
-                    selectMainMenu();
+                checkCommand(menu);
             }
-
         }
 
         public void mainMenu() throws IOException {
-
+            /*
             System.out.println("\nСписок команд");
             System.out.println("'main_menu' - вернуться в меню 'Выбор ввода данных'");
             System.out.println("'sort_menu' - вернуться в меню 'Сортировка данных'");
@@ -79,7 +76,7 @@ public class MenuConstructorClass {
                     System.out.println("\nНеверная команда, попробуйте снова...");
                     mainMenu();
             }
-
+            */
         }
 
         public void sortMenu(List<Student> student) {
@@ -96,20 +93,24 @@ public class MenuConstructorClass {
             Scanner scanner = new Scanner(System.in);
             String menu = scanner.nextLine();
             SortProcessor sorted = new SortedClass();
-            FileProcessor processor = new FileManager();
+            //Один большой вопрос: зачем временный файл
+            //FileProcessor processor = new FileManager();
 
             switch (menu) {
                 case "sort_name":
                     sorted.sortedName(student);
-                    processor.processWriteFileInterface(student,false);
+                    isSorted = true;
+                    //processor.processWriteFileInterface(student,false);
                     break;
                 case "sort_grade":
                     sorted.sortedGrade(student);
-                    processor.processWriteFileInterface(student,false);
+                    isSorted = true;
+                    //processor.processWriteFileInterface(student,false);
                     break;
                 case "sort_gradebook":
                     sorted.sortedGradebookNumber(student);
-                    processor.processWriteFileInterface(student,false);
+                    isSorted = true;
+                    //processor.processWriteFileInterface(student,false);
                     break;
                 case "quit":
                     System.exit(0);
@@ -170,14 +171,66 @@ public class MenuConstructorClass {
 //                    newFile.delete();
 //                    oldFile.renameTo(newFile);
 //                    oldFile.delete();
+                    System.out.println("Введите название файла:");
+                    String fileName = scanner.nextLine();
+                    fileManager.writeDataInFile(students, fileName);
+                    selectMainMenu();
                     break;
                 case "no":
-//                    File file = new File("temp_sorted.txt");
-//                    file.delete();
+                    selectMainMenu();
                     break;
                 default:
                     System.out.println("\nНеверная команда, попробуйте снова...");
                     saveFile();
+            }
+        }
+        //метод для проверки команд
+        public void checkCommand(String command){
+            switch (command) {
+                case "manual_input":
+                    System.out.println("\nВы выбрали ввод данных вручную\n");
+                    WriteFileClass writeFileClass = new WriteFileClass();
+                    try {
+                        writeFileClass.writeFile();
+                        isSorted = false;
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                        //throw new RuntimeException(e);
+                    }
+                    break;
+                case "random_input":
+                    System.out.println("\nВы выбрали ввод данных случайно");
+                    RandomFileClass randomFileClass = new RandomFileClass();
+                    try {
+                        randomFileClass.randomFile();
+                        isSorted = false;
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                        //throw new RuntimeException(e);
+                    }
+                    break;
+                case "file_input":
+                    System.out.println("\nВы выбрали ввод данных из файла");
+                    ReadFileClass readFileClass = new ReadFileClass();
+                    //по заданию пользователь должен иметь возможность ограничить
+                    System.out.println("Введите количество студентов:");
+                    while (!scanner.hasNextInt()){
+                        System.out.println("Введите количество студентов:");
+                        scanner.next();
+                    }
+                    int count = scanner.nextInt();
+                    students = readFileClass.readFile(count);
+                    isSorted = false;
+                    break;
+                case "quit":
+                    System.exit(0);
+                    break;
+                case "sort_menu":
+                    sortMenu(students);
+                    break;
+                default:
+                    System.out.println("\nНеверная команда, попробуйте снова...");
+                    selectMainMenu();
             }
         }
 }
