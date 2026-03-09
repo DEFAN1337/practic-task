@@ -3,7 +3,6 @@ package org.example.packageReadFile;
 import org.example.menu.MenuConstructorClass;
 import org.example.model.Student;
 import org.example.packageInterface.FileProcessor;
-import org.example.packageReadFile.FileManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +27,9 @@ public class ReadFileClass extends FileManager {
 
             MenuConstructorClass menuSort = new MenuConstructorClass();
             menuSort.sortMenu(student);
+
+            MenuConstructorClass menuConstructorClass = new MenuConstructorClass();
+            menuConstructorClass.saveFile();
 
             MenuConstructorClass menuMain = new MenuConstructorClass();
             menuMain.mainMenu();

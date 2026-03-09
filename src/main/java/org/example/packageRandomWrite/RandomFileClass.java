@@ -89,6 +89,9 @@ public class RandomFileClass {
             MenuConstructorClass menuSort = new MenuConstructorClass();
             menuSort.sortMenu(student);
 
+            MenuConstructorClass menuSave = new MenuConstructorClass();
+            menuSave.saveFile();
+
             MenuConstructorClass menuMain = new MenuConstructorClass();
             menuMain.mainMenu();
 
