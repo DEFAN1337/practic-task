@@ -88,7 +88,7 @@ public class MenuConstructorClass {
             System.out.println("\nСписок команд");
             System.out.println("'sort_name' - отсортировать по имени");
             System.out.println("'sort_grade' - отсортировать по оценочному баллу");
-            System.out.println("'sort gradebook' - отсортировать по номеру зачетной книжки");
+            System.out.println("'sort_gradebook' - отсортировать по номеру зачетной книжки");
             System.out.println("'quit' - закрыть приложение");
             System.out.print("Введите команду: ");
 
@@ -122,7 +122,7 @@ public class MenuConstructorClass {
 
         }
 
-        public void writeMenu() throws IOException {
+        public void writeMenu(List<Student> student) throws IOException {
 
             System.out.println("\nСписок команд");
             System.out.println("'continue' - продолжить ввод данных");
@@ -140,7 +140,7 @@ public class MenuConstructorClass {
                     writeFileClass.writeFile();
                     break;
                 case "sort_menu":
-//                sortMenu();
+                    sortMenu(student);
                     break;
                 case "quit":
                     System.exit(0);
@@ -148,7 +148,7 @@ public class MenuConstructorClass {
 
                 default:
                     System.out.println("\nНеверная команда, попробуйте снова...");
-                    writeMenu();
+                    writeMenu(student);
             }
 
         }
@@ -161,19 +161,16 @@ public class MenuConstructorClass {
 
             Scanner scanner = new Scanner(System.in);
             String menu = scanner.nextLine();
+            FileProcessor processor = new FileManager();
+
             switch (menu) {
                 case "yes":
-//                    System.out.println("Введите название файла:");
-//                    File oldFile = new File("temp_sorted.txt");
-//                    String fileName = scanner.nextLine();
-//                    File newFile = new File(fileName + ".txt");
-//                    newFile.delete();
-//                    oldFile.renameTo(newFile);
-//                    oldFile.delete();
+                    Scanner fileName = new Scanner(System.in);
+                    System.out.println("Введите название файла:");
+                    processor.processSaveFile(fileName.nextLine());
                     break;
                 case "no":
-//                    File file = new File("temp_sorted.txt");
-//                    file.delete();
+                    processor.processDeleteTempFile();
                     break;
                 default:
                     System.out.println("\nНеверная команда, попробуйте снова...");

@@ -1,9 +1,13 @@
 package org.example.packageRandomWrite;
 
 import org.example.menu.MenuConstructorClass;
+import org.example.model.Student;
+import org.example.packageInterface.FileProcessor;
+import org.example.packageReadFile.FileManager;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class WriteFileClass {
@@ -11,6 +15,7 @@ public class WriteFileClass {
     // Метод реализующий ручной ввод данных
     public static void writeFile() throws IOException {
 
+        List<Student> student = new ArrayList<>();
         String nameStudent = null, gradeStudent = null, gradebookNumberStudent = null;
 
         while (true) {
@@ -66,32 +71,37 @@ public class WriteFileClass {
                 }
             }
 
-            System.out.println("Добавление данных в файл: " + nameStudent + "; " + gradeStudent + "; " + gradebookNumberStudent + ";");
+            student.add(new Student.Builder()
+                    .name(nameStudent)
+                    .grade(Double.parseDouble(gradeStudent))
+                    .gradebookNumber(Integer.parseInt(gradebookNumberStudent))
+                    .build());
+            System.out.println("\nДобавление данных в файл: " + student);
 
-//            Student p = new Student.Builder()
-//                    .setName(nameStudent)
-//                    .setGrade(Integer.parseInt(gradeStudent))
-//                    .setGradebookNumberStudent(Integer.parseInt(gradebookNumberStudent))
-//                    .build();
-//            System.out.println("\nДобавление данных в файл: \n" + p);
+            FileProcessor processor = new FileManager();
+            processor.processDeleteEmptyRemoverInterface("Note");
+            processor.processWriteFileInterface(student,"Note", true);
+            student.clear();
+            System.out.println("\nСписок студентов которых вы добавили: \n");
+            processor.processReadFileInterface(student,"Note");
 
-            // Запись в файл
-            // append=false - перезапись, true - добавление в конец
-            try (FileWriter writer = new FileWriter("NoteManualInput.txt", true)) {
-                writer.write("\n" + nameStudent + "; " + gradeStudent + "; " + gradebookNumberStudent + ";");
-                writer.flush(); // очистка буфера
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
 
             while (true) {
+
                 MenuConstructorClass menuConstructorClass = new MenuConstructorClass();
-                menuConstructorClass.writeMenu();
+                menuConstructorClass.writeMenu(student);
+
+                MenuConstructorClass menuSaveFile = new MenuConstructorClass();
+                menuSaveFile.saveFile();
 
                 while (true) {
                     MenuConstructorClass menuConstructorClassMainMenu = new MenuConstructorClass();
                     menuConstructorClassMainMenu.mainMenu();
+
+                    MenuConstructorClass menuSort = new MenuConstructorClass();
+                    menuSort.sortMenu(student);
+
+                    menuSaveFile.saveFile();
                 }
 
             }
