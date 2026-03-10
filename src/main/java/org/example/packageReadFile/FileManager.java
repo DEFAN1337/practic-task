@@ -7,6 +7,7 @@ import org.example.packageInterface.FileProcessor;
 
 import javax.imageio.IIOException;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -76,7 +77,7 @@ public class FileManager implements FileProcessor {
     @Override
     public void processWriteFileInterface (List<Student> student, boolean flag) {
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("temp_sorted.txt", flag))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("temp_sorted.txt", StandardCharsets.UTF_8, flag))) {
             for (int i = 0; i < student.size(); i++) {
                 writer.write(student.get(i).getName() + "; " + student.get(i).getGrade() + "; " + student.get(i).getGradebookNumber() + ";");
                 writer.newLine();
@@ -86,8 +87,40 @@ public class FileManager implements FileProcessor {
             e.printStackTrace();
         }
 
-        MenuConstructorClass menuConstructorClass = new MenuConstructorClass();
-        menuConstructorClass.saveFile();
+    }
+    @Override
+    public void processWriteFileInterface (List<Student> student, String fileName, boolean flag) {
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName + ".txt", StandardCharsets.UTF_8, flag))) {
+            for (int i = 0; i < student.size(); i++) {
+                writer.write(student.get(i).getName() + "; " + student.get(i).getGrade() + "; " + student.get(i).getGradebookNumber() + ";");
+                writer.newLine();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void processSaveFile (String fileName) {
+
+        File oldFile = new File("temp_sorted.txt");
+
+        File newFile = new File(fileName + ".txt");
+        newFile.delete();
+        oldFile.renameTo(newFile);
+        oldFile.delete();
+
+    }
+
+    @Override
+    public void processDeleteTempFile () {
+
+        File file = new File("temp_sorted.txt");
+        file.delete();
+
     }
 
     //метод для записи в файл

@@ -132,8 +132,8 @@ public class MenuConstructorClass {
             }
 
         }
-        //по хорошему от этого тоже надо избавиться
-        public void writeMenu() throws IOException {
+
+        public void writeMenu(List<Student> student) throws IOException {
 
             System.out.println("\nСписок команд");
             System.out.println("'continue' - продолжить ввод данных");
@@ -151,7 +151,7 @@ public class MenuConstructorClass {
                     writeFileClass.writeFile();
                     break;
                 case "sort_menu":
-//                sortMenu();
+                    sortMenu(student);
                     break;
                 case "quit":
                     System.exit(0);
@@ -159,7 +159,7 @@ public class MenuConstructorClass {
 
                 default:
                     System.out.println("\nНеверная команда, попробуйте снова...");
-                    writeMenu();
+                    writeMenu(student);
             }
 
         }
@@ -172,6 +172,8 @@ public class MenuConstructorClass {
 
             Scanner scanner = new Scanner(System.in);
             String menu = scanner.nextLine();
+            FileProcessor processor = new FileManager();
+
             switch (menu) {
                 case "yes":
 //                    System.out.println("Введите название файла:");
@@ -182,14 +184,19 @@ public class MenuConstructorClass {
 //                    oldFile.renameTo(newFile);
 //                    oldFile.delete();
                     System.out.println("Введите название файла:");
-                    String fileName = scanner.nextLine();
-                    fileManager.writeDataInFile(students, fileName);
+                    String fileName_str = scanner.nextLine();
+                    fileManager.writeDataInFile(students, fileName_str);
                     students.clearSorted();
                     selectMainMenu();
+
+                    Scanner fileName = new Scanner(System.in);
+                    //System.out.println("Введите название файла:");
+                    processor.processSaveFile(fileName.nextLine());
                     break;
                 case "no":
                     students.clearSorted();
                     selectMainMenu();
+                    processor.processDeleteTempFile();
                     break;
                 default:
                     System.out.println("\nНеверная команда, попробуйте снова...");

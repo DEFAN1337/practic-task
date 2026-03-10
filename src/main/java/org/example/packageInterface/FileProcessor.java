@@ -11,4 +11,10 @@ public interface FileProcessor {
     void processReadFileInterface (List<Student> student, String fileName);
 
     void processWriteFileInterface (List<Student> student, boolean flag);
+
+    void processWriteFileInterface (List<Student> student, String fileName, boolean flag);
+
+    void processSaveFile (String fileName);
+
+    void processDeleteTempFile();
 }
