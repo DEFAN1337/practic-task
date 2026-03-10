@@ -1,5 +1,6 @@
 package org.example.packageReadFile;
 
+import org.example.collection.StudentsList;
 import org.example.menu.MenuConstructorClass;
 import org.example.model.Student;
 import org.example.packageInterface.FileProcessor;
@@ -96,7 +97,7 @@ public class FileManager implements FileProcessor {
         if(!fileName.contains(".txt")){
             fileName = fileName+".txt";
         }
-        System.out.println(fileName);
+        //System.out.println(fileName);
         //проверяем существует ли файл
         if(Files.exists(Path.of(fileName))){
             //если файл существует
@@ -105,7 +106,7 @@ public class FileManager implements FileProcessor {
             name+= LocalDateTime.now().format(format);
             fileName= name+".txt";
         }
-        System.out.println(fileName);
+        //System.out.println(fileName);
         Path path = Path.of(fileName);
         try {
             Files.createFile(path);
@@ -123,8 +124,8 @@ public class FileManager implements FileProcessor {
 
     //метод для считывания данных из файла
     //fileName - наименование файла
-    public List<Student> readDataFromFile(String fileName){
-        List<Student> students = new ArrayList<>();
+    public StudentsList readDataFromFile(String fileName){
+        StudentsList students = new StudentsList();
         Path path = Path.of(fileName);
         //проверяем существует ли файл
         if( Files.exists(path)){

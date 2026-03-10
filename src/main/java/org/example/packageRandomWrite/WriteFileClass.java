@@ -1,12 +1,24 @@
 package org.example.packageRandomWrite;
 
+import org.example.collection.StudentsList;
 import org.example.menu.MenuConstructorClass;
+import org.example.model.Student;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class WriteFileClass {
+
+    private Scanner scanner;
+    private StudentsList students;
+
+    public WriteFileClass(){
+        scanner = new Scanner(System.in);
+        students = new StudentsList();
+    }
 
     // Метод реализующий ручной ввод данных
     public static void writeFile() throws IOException {
@@ -100,4 +112,48 @@ public class WriteFileClass {
 
     }
 
+    //новый метод создания данных
+    public StudentsList writeDataStudent(int count){
+        for(int i=0; i<count; i++){
+            System.out.println("Заполнение данных по студенту №"+(i+1));
+           String name = null;
+            int grade = 0, number = 0;
+            System.out.println("Введите имя студента:");
+            name = scanner.next();
+            while (!name.matches("^[а-яА-Я]+$")){
+                System.out.println("Ошибка! Введите имя студента, используя только буквы (кирилица). ");
+                System.out.println("Введите имя студента:");
+                name = scanner.next();
+            }
+            System.out.print("Введите оценочный балл студента: ");
+            while (!scanner.hasNext("[2-5]")){
+                System.out.println("Ошибка! Оценка - это число в диапазоне от 2 до 5");
+                System.out.print("Введите оценочный балл студента: ");
+                scanner.next();
+            }
+            grade = scanner.nextInt();
+            System.out.print("Введите номер зачетной книжки студента: ");
+            while (!scanner.hasNext("[1-9][0-9]{5}")){
+                System.out.println("Ошибка! Номер зачетной книжки - это 6-ти значное число");
+                System.out.print("Введите номер зачетной книжки студента: ");
+                scanner.next();
+            }
+            number = scanner.nextInt();
+            try {
+                var student = new Student.Builder()
+                        .name(name)
+                        .gradebookNumber(number)
+                        .grade(grade)
+                        .build();
+                System.out.println(student.toString());
+                students.add(student);
+            } catch (RuntimeException e) {
+                System.err.println(e.getMessage());
+                i--;
+                //throw new RuntimeException(e);
+            }
+        }
+        students.forEach(System.out::println);
+        return students;
+    }
 }

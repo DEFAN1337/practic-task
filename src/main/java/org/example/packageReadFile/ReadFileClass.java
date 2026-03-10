@@ -1,5 +1,6 @@
 package org.example.packageReadFile;
 
+import org.example.collection.StudentsList;
 import org.example.menu.MenuConstructorClass;
 import org.example.model.Student;
 import org.example.packageInterface.FileProcessor;
@@ -46,10 +47,10 @@ public class ReadFileClass extends FileManager {
     //имя файла, из которого считываем данные
     private String fileName = "students.txt";
     //список студентов, считанных из файла
-    private List<Student> students = new ArrayList<>();
+    private StudentsList students = new StudentsList();
     //метод для считывания файла
     //count - количество данных в массиве данные (по заданию пользователь имеет возможность ограничить)
-    public List<Student> readFile(int count){
+    public StudentsList readFile(int count){
         System.out.println("Количество студентов для считывания из файла: "+count);
         String fileName = "students.txt";
         try {
