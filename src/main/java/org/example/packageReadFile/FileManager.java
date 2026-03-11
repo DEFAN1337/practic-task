@@ -1,7 +1,6 @@
 package org.example.packageReadFile;
 
 import org.example.collection.StudentsList;
-import org.example.menu.MenuConstructorClass;
 import org.example.model.Student;
 import org.example.packageInterface.FileProcessor;
 
@@ -13,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 //класс для работы с файлом
@@ -148,7 +146,7 @@ public class FileManager implements FileProcessor {
             Files.createFile(path);
             StringBuilder builder = new StringBuilder();
             //по хорошему надо подумать как избавиться от последней пустой строки
-            students.forEach(student -> builder.append(student.getName()+";"+student.getGrade()+";"+student.getGradebookNumber()+"\n"));
+            students.forEach(student -> builder.append(student.getName()).append(";").append(student.getGrade()).append(";").append(student.getGradebookNumber()).append("\n"));
             Files.writeString(path, builder.toString());
             System.out.println("Данные успешно сохранены.");
         } catch (IOException e) {
@@ -171,8 +169,8 @@ public class FileManager implements FileProcessor {
                         .filter(line->(!line.isEmpty() && line.trim().split(";").length==3)).toList();
                 data.stream().forEach(student->{
                     var splitData = student.trim().split(";");
-                    double grade = 0;
-                    int number = 0;
+                    double grade;
+                    int number;
                     try {
                         grade = Integer.parseInt(splitData[1].trim());
                     } catch (NumberFormatException e) {
