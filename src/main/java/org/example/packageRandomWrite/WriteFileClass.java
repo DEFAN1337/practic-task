@@ -133,7 +133,7 @@ public class WriteFileClass {
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 i--;
-                //throw new RuntimeException(e);
+
             }
         }
         students.forEach(System.out::println);
