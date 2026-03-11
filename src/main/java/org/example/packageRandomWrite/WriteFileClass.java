@@ -1,12 +1,10 @@
 package org.example.packageRandomWrite;
 
 import org.example.collection.StudentsList;
-import org.example.menu.MenuConstructorClass;
 import org.example.model.Student;
 import org.example.packageInterface.FileProcessor;
 import org.example.packageReadFile.FileManager;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,30 +92,7 @@ public class WriteFileClass {
             student.clear();
             System.out.println("\nСписок студентов которых вы добавили: \n");
             processor.processReadFileInterface(student,"Note");
-
-
-            while (true) {
-
-                MenuConstructorClass menuConstructorClass = new MenuConstructorClass();
-                menuConstructorClass.writeMenu(student);
-
-                MenuConstructorClass menuSaveFile = new MenuConstructorClass();
-                menuSaveFile.saveFile();
-
-                while (true) {
-                    MenuConstructorClass menuConstructorClassMainMenu = new MenuConstructorClass();
-                    menuConstructorClassMainMenu.mainMenu();
-
-                    MenuConstructorClass menuSort = new MenuConstructorClass();
-                    menuSort.sortMenu(student);
-
-                    menuSaveFile.saveFile();
-                }
-
-            }
-
         }
-
     }
 
     //новый метод создания данных
