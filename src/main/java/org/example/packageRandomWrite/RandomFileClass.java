@@ -1,16 +1,12 @@
 package org.example.packageRandomWrite;
 
-import org.example.menu.MenuConstructorClass;
+import org.example.collection.StudentsList;
 import org.example.model.Student;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 public class RandomFileClass {
 
-    List<Student> student = new ArrayList<>();
+    StudentsList studentsList = new StudentsList();
+
     public String[] arrayName = new String[]
             {
                     // Мужские имена (50)
@@ -30,73 +26,24 @@ public class RandomFileClass {
 
     int min = 100000;
     int max = 200000;
-    public void randomFile() throws IOException {
-        int number = 0;
-        boolean turn = true;
-        while (turn) {
-            Scanner sc = new Scanner(System.in);
-            System.out.print("Введите количество студентов: ");
-            if (sc.hasNextInt()) {
-                number = sc.nextInt();
-                System.out.println("Вы ввели случайное число студентов: " + number + "\n");
-                turn= !turn;
-            } else {
-                System.out.println("Ошибка! Можно использовать только цифры.");
-            }
-        }
+
+    public StudentsList generate(int number) {
+
         for (int i = 0; i < number; i++) {
 
             int randomName = (int) (Math.random() * arrayName.length);
             double randomGrade = Math.round((Math.random() * 30 + 20)) / 10.0;
-            int randomeGradebookNumber = (int) (Math.random() * ((max - min) + 1) + min);
+            int randomGradebookNumber = (int) (Math.random() * ((max - min) + 1) + min);
 
-            /* Неплохо было бы сделать обработку данных перед записью в коллекцию, на случай
-            если номер зачетной книжки уже был введен, второй раз вводить недопустимо
-            у студентов номера зачетной книжек не должны совпадать.
-            есть понимание как сделать при ручном вводе, попробую организвать
-            с рандомом посложнее, пока не получилось.
-            */
-
-            /*
-            while (turn) {
-
-                for (int j = 0; j < student.size(); j++) {
-                    randomeGradebookNumber = (int) (Math.random() * ((max - min) + 1) + min);
-                    if (randomeGradebookNumber == student.get(j).gradebookNumberStudent) {
-                        break;
-                    }
-
-                    if (j == student.size() - 1 && randomeGradebookNumber != student.get(j).gradebookNumberStudent) {
-                        turn = !turn;
-                    }
-
-                }
-                System.out.println(randomeGradebookNumber);
-            }
-            */
-
-            //student.add(new Student(arrayName[randomName],randomGrade,randomeGradebookNumber));
-            student.add(new Student.Builder()
+            studentsList.add(
+                    new Student.Builder()
                     .name(arrayName[randomName])
                     .grade(randomGrade)
-                    .gradebookNumber(randomeGradebookNumber)
-                    .build());
-        }
-        student.forEach(System.out::println);
-
-        while (true) {
-
-            MenuConstructorClass menuSort = new MenuConstructorClass();
-            menuSort.sortMenu(student);
-
-            MenuConstructorClass menuSave = new MenuConstructorClass();
-            menuSave.saveFile();
-
-            MenuConstructorClass menuMain = new MenuConstructorClass();
-            menuMain.mainMenu();
-
+                    .gradebookNumber(randomGradebookNumber)
+                    .build()
+            );
         }
 
+        return studentsList;
     }
-
 }
