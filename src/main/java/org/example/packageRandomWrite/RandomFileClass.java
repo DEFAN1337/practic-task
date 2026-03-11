@@ -47,7 +47,7 @@ public class RandomFileClass {
         for (int i = 0; i < number; i++) {
 
             int randomName = (int) (Math.random() * arrayName.length);
-            int randomGrade = (int) (Math.random() * 5) + 1;
+            double randomGrade = Math.round((Math.random() * 30 + 20)) / 10.0;
             int randomeGradebookNumber = (int) (Math.random() * ((max - min) + 1) + min);
 
             /* Неплохо было бы сделать обработку данных перед записью в коллекцию, на случай
