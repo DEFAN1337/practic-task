@@ -2,6 +2,8 @@ package org.example.model;
 
 import org.example.validation.StudentValidator;
 
+import java.util.Objects;
+
 
 public class Student {
     private final String name;
@@ -31,6 +33,20 @@ public class Student {
     public String toString() {
         return "Имя студента: " +name + "; Номер зачетной книжки: " + gradebookNumber + "; Сред.бал: " + grade;
 
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return gradebookNumber == student.gradebookNumber &&
+                Double.compare(student.grade, grade) == 0 &&
+                Objects.equals(name, student.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, gradebookNumber, grade);
     }
 
     public static class Builder {
