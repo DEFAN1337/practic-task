@@ -9,7 +9,7 @@ public class MainClass {
     public static void main(String[] args) throws IOException {
 
         MenuConstructorClass menuConstructorClass = new MenuConstructorClass();
-        menuConstructorClass.selectMainMenu();
+        menuConstructorClass.start();
 
     }
 

@@ -127,21 +127,24 @@ public class FileManager implements FileProcessor {
     //student - отсортированный список студентов
     //fileName - наименование файла, в который надо записать
     public void writeDataInFile(List<Student> students, String fileName){
-        if(!fileName.contains(".txt")){
-            fileName = fileName+".txt";
+
+        if (!fileName.contains(".txt")) {
+
+            fileName = fileName + ".txt";
         }
-        //System.out.println(fileName);
-        //проверяем существует ли файл
-        if(Files.exists(Path.of(fileName))){
-            //если файл существует
-            var name = fileName.split("\\.")[0];
-            var format = DateTimeFormatter.ofPattern("-ddMMyy-HHmmss");
-            name+= LocalDateTime.now().format(format);
-            fileName= name+".txt";
+
+        if (Files.exists(Path.of(fileName))) {
+
+            String name = fileName.split("\\.")[0];
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("-ddMMyy-HHmmss");
+
+            fileName = name + LocalDateTime.now().format(format) + ".txt";
         }
-        //System.out.println(fileName);
+
         Path path = Path.of(fileName);
+        System.out.println(students.size());
         try {
+
             Files.createFile(path);
             StringBuilder builder = new StringBuilder();
             //по хорошему надо подумать как избавиться от последней пустой строки
@@ -149,8 +152,8 @@ public class FileManager implements FileProcessor {
             Files.writeString(path, builder.toString());
             System.out.println("Данные успешно сохранены.");
         } catch (IOException e) {
+
             System.out.println(e.getMessage());
-            //throw new RuntimeException(e);
         }
 
     }
