@@ -1,52 +1,50 @@
 package org.example.collection;
 
 import org.example.model.Student;
-import org.example.packageInterface.SortProcessor;
 import org.example.packageSort.SortedClass;
 
 import java.util.ArrayList;
-import java.util.stream.Collector;
 
-//пока так, наследуем его от ArrayList
 public class StudentsList extends ArrayList<Student> {
 
-    //признак, что данные отсортированны
-    private boolean isSorted = false;
-    SortProcessor sorted = new SortedClass();
+    private final SortedClass sorter = new SortedClass();
 
+    private boolean isSorted = false;
+
+    @Override
     public boolean add(Student student) {
         isSorted = false;
         return super.add(student);
+    }
+
+    @Override
+    public void add(int index, Student element) {
+        isSorted = false;
+        super.add(index, element);
+    }
+
+    @Override
+    public void clear() {
+        isSorted = false;
+        super.clear();
     }
 
     public boolean isSorted() {
         return isSorted;
     }
 
-    public void add(int index, Student element) {
-        isSorted = false;
-        super.add(index, element);
-    }
-
-    public boolean remove(Student student) {
-        return super.remove(student);
-    }
-
-    public void sortByName(){
-        sorted.sortedName(this);
+    public void sortByName() {
+        sorter.sortedName(this);
         isSorted = true;
     }
 
-    public void sortByGrade(){
-        sorted.sortedGrade(this);
+    public void sortByGrade() {
+        sorter.sortedGrade(this);
         isSorted = true;
     }
 
-    public void sortByNumberGradebook(){
-        sorted.sortedGradebookNumber(this);
+    public void sortByNumberGradebook() {
+        sorter.sortedGradebookNumber(this);
         isSorted = true;
-    }
-    public void clearSorted(){
-        isSorted = false;
     }
 }
