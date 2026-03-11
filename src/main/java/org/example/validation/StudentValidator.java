@@ -8,7 +8,7 @@ public final class StudentValidator {
 
     private static final Pattern studentNamePattern = Pattern.compile("[a-zA-Zа-яА-ЯёЁ]+");
 
-    private static final int MIN_NAME_LENGTH = 4;
+    private static final int MIN_NAME_LENGTH = 2;
 
     private static final int MAX_NAME_LENGTH = 100;
 
@@ -64,6 +64,14 @@ public final class StudentValidator {
                     "Ошибка у студента '" + builder.getName() +
                         "'. Номер зачетной книжки должен быть положительным. " +
                         "Вы ввели: " + number
+            );
+        }
+
+        if (number < 100000 || number > 999999) {
+            throw new ValidationException(
+                    "Ошибка у студента '" + builder.getName() +
+                            "'. Номер зачетной книжки должен иметь длину 6. " +
+                            "Вы ввели: " + number
             );
         }
     }
