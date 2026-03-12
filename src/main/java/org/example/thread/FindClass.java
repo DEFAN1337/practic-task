@@ -51,7 +51,7 @@ public class FindClass{
         System.out.println("Поток "+Thread.currentThread().getName()+" запущен");
         if(number!=0 ){
             System.out.println("Ищем студенов с номером зачетной книжки '"+number+"'");
-            var result = students.stream().filter(student_->student_.getGrade() == grade).toList();
+            var result = students.stream().filter(student_->student_.getGradebookNumber() == number).toList();
             System.out.println("Количество студентов с номером зачетной книжки '"+number+"' равно: " + result.size());
             result.forEach(System.out::println);
         }else {

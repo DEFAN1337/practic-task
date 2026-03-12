@@ -1,5 +1,6 @@
 package org.example.packageSort;
 
+import org.example.collection.StudentsList;
 import org.example.model.Student;
 import org.example.packageInterface.SortProcessor;
 
@@ -9,7 +10,7 @@ import java.util.List;
 public class SortedClass implements SortProcessor {
 
     @Override
-    public void sortedName(List<Student> student) {
+    public void sortedName(StudentsList student) {
 
         System.out.println();
         student.forEach(System.out::println);
@@ -20,7 +21,6 @@ public class SortedClass implements SortProcessor {
         while (!is_Sorted) {
             is_Sorted = true;
             for (int i = 0; i < student.size() - 1; i++) {
-
                 String name1 = student.get(i).getName();
                 String name2 = student.get(i + 1).getName();
                 int lim = Math.min(name1.length(), name2.length());
@@ -59,24 +59,26 @@ public class SortedClass implements SortProcessor {
     }
 
     @Override
-    public void sortedGrade(List<Student> student) {
+    public void sortedGrade(StudentsList student) {
 
         System.out.println();
         student.forEach(System.out::println);
         System.out.println("\nПолученные данные\n");
 
         //Студенты все
-        List<Student> Student_list1 = new ArrayList<>(student);
+        //List<Student> Student_list1 = new ArrayList<>(student);
+        StudentsList Student_list1 = new StudentsList(student);
         //Сортировка
         Sort_Grade(Student_list1);
         Student_list1.forEach(System.out::println);
         System.out.println("\nДанные отсортированы по оценочному баллу\n");
 
-
         //Студенты с чётными значениями
-        List<Student> Student_list2 = new ArrayList<>(student);
+        //List<Student> Student_list2 = new ArrayList<>(student);
+        StudentsList Student_list2 = new StudentsList(student);
         //Студенты с чётными значениями
-        List<Student> evenStudents = new ArrayList<>();
+        //List<Student> evenStudents = new ArrayList<>();
+        StudentsList evenStudents = new StudentsList();
         for (Student s : student) {
             if (s.getGrade() % 2 == 0) {
                 evenStudents.add(s);
@@ -85,7 +87,6 @@ public class SortedClass implements SortProcessor {
 
         //Сортировка только чётных значений
         Sort_Grade(evenStudents);
-
         //Замена чётных значений в основном списке на отсортированные чётные значения
         int evenIndex = 0;
         for (int i = 0; i < student.size(); i++) {
@@ -94,13 +95,12 @@ public class SortedClass implements SortProcessor {
                 evenIndex++;
             }
         }
-
         Student_list2.forEach(System.out::println);
         System.out.println("\nДанные отсортированы по дополнительному заданию №1\n");
     }
 
     // Метод по сортировки оценок
-    private void Sort_Grade(List<Student> list) {
+    private void Sort_Grade(StudentsList list) {
         int n = list.size();
         // блок сортировки по оценке
         boolean is_Sorted = false;
@@ -120,7 +120,7 @@ public class SortedClass implements SortProcessor {
     }
 
     @Override
-    public void sortedGradebookNumber(List<Student> student) {
+    public void sortedGradebookNumber(StudentsList student) {
 
         System.out.println();
 
@@ -128,7 +128,7 @@ public class SortedClass implements SortProcessor {
         System.out.println("\nПолученные данные\n");
 
         //Студенты все
-        List<Student> Student_list1 = new ArrayList<>(student);
+        StudentsList Student_list1 = new StudentsList(student);
         //Сортировка
         Sort_GradebookNumber(Student_list1);
         Student_list1.forEach(System.out::println);
@@ -136,9 +136,11 @@ public class SortedClass implements SortProcessor {
 
 
         //Студенты с чётными значениями
-        List<Student> Student_list2 = new ArrayList<>(student);
+        //List<Student> Student_list2 = new ArrayList<>(student);
+        StudentsList Student_list2 = new StudentsList(student);
         //Студенты с чётными значениями
-        List<Student> evenStudents = new ArrayList<>();
+        //List<Student> evenStudents = new ArrayList<>();
+        StudentsList evenStudents = new StudentsList();
         for (Student s : student) {
             if (s.getGradebookNumber() % 2 == 0) {
                 evenStudents.add(s);
@@ -163,7 +165,7 @@ public class SortedClass implements SortProcessor {
     }
 
     // Метод по сортировки студенческих
-    private void Sort_GradebookNumber(List<Student> list) {
+    private void Sort_GradebookNumber(StudentsList list) {
         int n = list.size();
         // блок сортировки по оценке
         boolean is_Sorted = false;
