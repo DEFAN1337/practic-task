@@ -136,7 +136,6 @@ public class WriteFileClass {
 
             }
         }
-        students.forEach(System.out::println);
         return students;
     }
 }
