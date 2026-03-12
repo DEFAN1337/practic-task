@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -123,32 +124,38 @@ public class FileManager implements FileProcessor {
 
     //метод для записи в файл
     //student - отсортированный список студентов
-    //fileName - наименование файла, в который надо записать
-    public void writeDataInFile(List<Student> students, String fileName){
-
-        if (!fileName.contains(".txt")) {
-
-            fileName = fileName + ".txt";
-        }
-
-        if (Files.exists(Path.of(fileName))) {
-
+    //fileName_ - наименование файла, в который надо записать
+    //isAppend - признак, что надо дописывать в файл если он уже существует
+    //isWriteNew - признак, что надо записывать в новый файл, если он существует(true) или же затирать старые данные
+    public void writeDataInFile(List<Student> students, String fileName_, boolean isAppend, boolean isWriteNew){
+        //проверяем как пользователь указал данные
+        String fileName = chckPath(fileName_);
+        //если файл существует и пишем в новый файл, то решаем проблему
+        if (Files.exists(Path.of(fileName)) && isWriteNew) {
             String name = fileName.split("\\.")[0];
             DateTimeFormatter format = DateTimeFormatter.ofPattern("-ddMMyy-HHmmss");
 
             fileName = name + LocalDateTime.now().format(format) + ".txt";
         }
-
         Path path = Path.of(fileName);
         System.out.println(students.size());
         try {
+            //если файла нет, то создаем
+            if(!Files.exists(path))
+                Files.createFile(path);
 
-            Files.createFile(path);
             StringBuilder builder = new StringBuilder();
             //по хорошему надо подумать как избавиться от последней пустой строки
             students.forEach(student -> builder.append(student.getName()).append(";").append(student.getGrade()).append(";").append(student.getGradebookNumber()).append("\n"));
-            Files.writeString(path, builder.toString());
-            System.out.println("Данные успешно сохранены.");
+            StandardOpenOption option;
+            //если нам надо дозаписать в конец
+            if(isAppend)
+                option = StandardOpenOption.APPEND;
+            else
+                option = StandardOpenOption.WRITE;
+
+            Files.writeString(path, builder.toString(), option);
+            System.out.println("Данные успешно сохранены в файл "+path);
         } catch (IOException e) {
 
             System.out.println(e.getMessage());
@@ -157,8 +164,9 @@ public class FileManager implements FileProcessor {
     }
 
     //метод для считывания данных из файла
-    //fileName - наименование файла
-    public StudentsList readDataFromFile(String fileName){
+    //name - наименование файла
+    public StudentsList readDataFromFile(String name){
+        String fileName = chckPath(name);
         StudentsList students = new StudentsList();
         Path path = Path.of(fileName);
         //проверяем существует ли файл
@@ -172,7 +180,7 @@ public class FileManager implements FileProcessor {
                     double grade;
                     int number;
                     try {
-                        grade = Integer.parseInt(splitData[1].trim());
+                        grade = Double.parseDouble(splitData[1].trim());
                     } catch (NumberFormatException e) {
                         //System.out.println("В файле есть ошибки.");
                         throw new RuntimeException("В файле есть ошибки.");
@@ -201,6 +209,18 @@ public class FileManager implements FileProcessor {
             throw new RuntimeException("Ошибка! Файла не существует.");
         }
         return students;
+    }
+
+    private String chckPath(String fileName){
+        if (!fileName.contains(".txt")) {
+            fileName = fileName + ".txt";
+        }
+        return  fileName;
+    }
+
+    public boolean isHaveFile(String name){
+        String fileName = chckPath(name);
+        return  Files.exists(Path.of(fileName));
     }
 }
 

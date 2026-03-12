@@ -1,14 +1,15 @@
 package org.example.packageInterface;
 
+import org.example.collection.StudentsList;
 import org.example.model.Student;
 
 import java.util.List;
 
 public interface SortProcessor {
 
-    void sortedName(List<Student> student);
+    void sortedName(StudentsList student);
 
-    void sortedGrade(List<Student> student);
+    void sortedGrade(StudentsList student);
 
-    void sortedGradebookNumber(List<Student> student);
+    void sortedGradebookNumber(StudentsList student);
 }

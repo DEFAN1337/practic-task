@@ -16,23 +16,31 @@ public class MenuConstructorClass {
     private final FileManager fileManager = new FileManager();
 
     private StudentsList studentsList = new StudentsList();
+    private ReadFileClass readFileClass = new ReadFileClass();
 
     public void start() {
-
         boolean running = true;
-
         while (running) {
-
             printMainMenu();
             String command = scanner.nextLine();
-
             switch (command) {
-
                 case "manual_input" -> manualInput();
                 case "random_input" -> randomInput();
-                case "file_input" -> fileInput();
-                case "sort_menu" -> sortMenu();
-                case "save" -> saveData();
+                case "file_input" -> selectFileMenu();
+                case "sort_menu" -> {
+                    if(studentsList.isEmpty()){
+                        System.out.println("Список студентов пуст. Сначала добавьте данные.");
+                    }else {
+                        sortMenu();
+                    }
+                }
+                case "save" -> {
+                    if(studentsList.isEmpty()){
+                        System.out.println("Список студентов пуст. Сначала добавьте данные.");
+                    }else {
+                        saveData();
+                    }
+                }
                 case "find" -> {
                     if (studentsList.isEmpty()) {
                         System.out.println("Список студентов пуст. Сначала добавьте данные.");
@@ -45,40 +53,84 @@ public class MenuConstructorClass {
             }
         }
     }
-
+    //ручной ввод данных
     private void manualInput() {
 
         System.out.println("Введите количество студентов:");
         int count = readInt();
 
         WriteFileClass writer = new WriteFileClass();
+        studentsList.clear();
         studentsList = writer.writeDataStudent(count);
-        System.out.println(studentsList.size());
+        studentsList.forEach(System.out::println);
+        //System.out.println(studentsList.size());
     }
-
+    //генерация данных
     private void randomInput() {
 
         System.out.println("Введите количество студентов:");
         int count = readInt();
 
         RandomFileClass generator = new RandomFileClass();
-
+        studentsList.clear();
         studentsList = generator.generate(count);
+        studentsList.forEach(System.out::println);
     }
+    //выбор файла для считывания
+    private void selectFileMenu(){
+        studentsList.clear();
+        while (studentsList.isEmpty()) {
+            printSelectFileMenu();
+            System.out.println("Введите команду:");
+            String command = scanner.nextLine();
+            switch (command) {
+                case "defailt" -> fileInput("students.txt");
+                case "castom" -> {
+                    System.out.println("Введите имя файла для ввода:");
+                    String fileName = scanner.nextLine();
+                    while (!fileManager.isHaveFile(fileName)){
+                        System.err.print("Ошибка! Такого файла не существует. Попробуйте еще раз:");
+                        fileName = scanner.nextLine();
+                    }
+                    fileInput(fileName);
+                }
+                case "back" -> {
+                    return;
+                }
+                case "quit" -> System.exit(0);
+                default -> System.out.println("Неверная команда");
+            }
+        }
 
-    private void fileInput() {
+    }
+    //отображение меню для считывания
+    private  void printSelectFileMenu(){
+        System.out.println("""
+                    Меню ' Выбор файла для считывания'
+                    'defailt' - для выбора файла по умолчанию
+                    'castom'  - для ввода наименования своего файла
+                    'back'    - вернуться в главное меню
+                    'quit'    - закрыть приложение
+                    """);
+    }
+    //считывание данных из файла
+    private void fileInput(String fileName) {
 
-        ReadFileClass readFileClass = new ReadFileClass();
+        //ReadFileClass readFileClass = new ReadFileClass();
 
-        System.out.println("Введите имя файла для ввода:");
-        String fileName = scanner.nextLine();
+        //System.out.println("Введите имя файла для ввода:");
+        //String fileName = scanner.nextLine();
 
-        System.out.println("Введите количество студентов:");
+        System.out.println("Введите количество студентов. Для отбора всех данных введите -1:");
         int count = readInt();
+        try {
+            studentsList = readFileClass.readFile(fileName, count);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
 
-        studentsList = readFileClass.readFile(fileName, count);
     }
-
+    //сортировка данных
     private void sortMenu() {
 
         while (true) {
@@ -99,7 +151,7 @@ public class MenuConstructorClass {
             }
         }
     }
-
+    //поиск данных
     private void findData() {
 
         while (true) {
@@ -176,13 +228,47 @@ public class MenuConstructorClass {
     }
 
     private void saveData() {
+        String nameFileToSave = "";
+        //признак, если файл существует, то дописать к нему
+        //true - дописываем в конец файла
+        boolean isAppend = false;
+        boolean isWriteNewFile = false;
 
-        System.out.println("Введите имя файла:");
-        String name = scanner.nextLine();
-        fileManager.writeDataInFile(studentsList, name);
-        studentsList.clear();
+        while (nameFileToSave.isEmpty()){
+            printMenuSave();
+            String command = scanner.nextLine();
+            System.out.println("Введите имя файла:");
+            nameFileToSave = scanner.nextLine();
+            switch (command) {
+                case "append"->{
+                    isAppend=true;
+                    isWriteNewFile=false;
+                }
+                case "rewrite"->{
+                    isAppend=false;
+                    isWriteNewFile=false;
+                }
+                case "new"->{
+                    isAppend=false;
+                    isWriteNewFile=true;
+                }
+            }
+            fileManager.writeDataInFile(studentsList, nameFileToSave, isAppend, isWriteNewFile);
+            studentsList.clear();
+        }
     }
-
+    private  void printMenuSave(){
+        System.out.println(
+                """
+                Меню 'Cохранение данных'
+                'append'  - дозаписать в существующий файл
+                'rewrite' - перезаписать существующий файл
+                'new'     - записать в новый файл
+                'back'    - вернуться в главное меню
+                'quit'    - закрыть приложение
+                """
+        );
+    }
     private void printMainMenu() {
         System.out.println(
                 """
@@ -216,8 +302,8 @@ public class MenuConstructorClass {
                 """
                 Меню 'Поиск данных'
                 find_name       - поиск по имени
-                find_grade      - отсортировать по оценочному баллу
-                find_gradebook  - отсортировать по номеру зачетной книжки
+                find_grade      - поиск по оценочному баллу
+                find_gradebook  - поиск по номеру зачетной книжки
                 back            - вернуться в главное меню
                 quit            - закрыть приложение
                 """
