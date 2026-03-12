@@ -13,8 +13,6 @@ public class SortedClass implements SortProcessor {
     public void sortedName(StudentsList student) {
 
         System.out.println();
-        student.forEach(System.out::println);
-        System.out.println("\nПолученные данные\n");
 
         // Сортировка по алфавиту
         boolean is_Sorted = false;
@@ -62,8 +60,7 @@ public class SortedClass implements SortProcessor {
     public void sortedGrade(StudentsList student) {
 
         System.out.println();
-        student.forEach(System.out::println);
-        System.out.println("\nПолученные данные\n");
+
 
         //Студенты все
         //List<Student> Student_list1 = new ArrayList<>(student);
@@ -123,9 +120,7 @@ public class SortedClass implements SortProcessor {
     public void sortedGradebookNumber(StudentsList student) {
 
         System.out.println();
-
-        student.forEach(System.out::println);
-        System.out.println("\nПолученные данные\n");
+       
 
         //Студенты все
         StudentsList Student_list1 = new StudentsList(student);
