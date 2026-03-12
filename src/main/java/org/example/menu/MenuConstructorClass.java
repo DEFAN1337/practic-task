@@ -62,8 +62,8 @@ public class MenuConstructorClass {
         WriteFileClass writer = new WriteFileClass();
         studentsList.clear();
         studentsList = writer.writeDataStudent(count);
+        System.out.println("---------------------Список введенных студентов:--------------------");
         studentsList.forEach(System.out::println);
-        //System.out.println(studentsList.size());
     }
     //генерация данных
     private void randomInput() {
