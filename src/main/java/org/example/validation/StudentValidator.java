@@ -6,11 +6,11 @@ import java.util.regex.Pattern;
 
 public final class StudentValidator {
 
-    private static final Pattern studentNamePattern = Pattern.compile("[a-zA-Zа-яА-ЯёЁ]+");
+    private static final Pattern studentNamePattern = Pattern.compile("\\p{L}+");
 
-    private static final int MIN_NAME_LENGTH = 2;
+    public static final int MIN_NAME_LENGTH = 2;
 
-    private static final int MAX_NAME_LENGTH = 100;
+    public static final int MAX_NAME_LENGTH = 100;
 
     public static void validate(Student.Builder builder) {
 
