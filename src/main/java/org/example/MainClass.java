@@ -10,7 +10,6 @@ public class MainClass {
 
         MenuConstructorClass menuConstructorClass = new MenuConstructorClass();
         menuConstructorClass.start();
-
     }
 
 }
