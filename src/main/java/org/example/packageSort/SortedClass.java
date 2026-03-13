@@ -4,8 +4,7 @@ import org.example.collection.StudentsList;
 import org.example.model.Student;
 import org.example.packageInterface.SortProcessor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
 
 public class SortedClass implements SortProcessor {
 
@@ -57,46 +56,6 @@ public class SortedClass implements SortProcessor {
     }
 
 
-    public void sorted_Grade(StudentsList student) {
-
-        System.out.println();
-        student.forEach(System.out::println);
-        System.out.println("\nПолученные данные\n");
-
-        //Студенты все
-        //List<Student> Student_list1 = new ArrayList<>(student);
-        StudentsList Student_list1 = new StudentsList(student);
-        //Сортировка
-        sortedGrade(Student_list1);
-        Student_list1.forEach(System.out::println);
-        System.out.println("\nДанные отсортированы по оценочному баллу\n");
-
-        //Студенты с чётными значениями
-        //List<Student> Student_list2 = new ArrayList<>(student);
-        StudentsList Student_list2 = new StudentsList(student);
-        //Студенты с чётными значениями
-        //List<Student> evenStudents = new ArrayList<>();
-        StudentsList evenStudents = new StudentsList();
-        for (Student s : student) {
-            if (s.getGrade() % 2 == 0) {
-                evenStudents.add(s);
-            }
-        }
-
-        //Сортировка только чётных значений
-        sortedGrade(evenStudents);
-        //Замена чётных значений в основном списке на отсортированные чётные значения
-        int evenIndex = 0;
-        for (int i = 0; i < student.size(); i++) {
-            if (student.get(i).getGrade() % 2 == 0) {
-                student.set(i, evenStudents.get(evenIndex));
-                evenIndex++;
-            }
-        }
-        Student_list2.forEach(System.out::println);
-        System.out.println("\nДанные отсортированы по дополнительному заданию №1\n");
-    }
-
     // Метод по сортировки оценок
     @Override
     public void sortedGrade(StudentsList list) {
@@ -116,48 +75,6 @@ public class SortedClass implements SortProcessor {
                 }
             }
         }
-    }
-
-
-    public void Sort_GradebookNumber(StudentsList student) {
-
-        System.out.println();
-
-        //Студенты все
-        StudentsList Student_list1 = new StudentsList(student);
-        //Сортировка
-        sortedGradebookNumber(Student_list1);
-        Student_list1.forEach(System.out::println);
-        System.out.println("\nДанные отсортированы по номеру студенческого билета\n");
-
-
-        //Студенты с чётными значениями
-        //List<Student> Student_list2 = new ArrayList<>(student);
-        StudentsList Student_list2 = new StudentsList(student);
-        //Студенты с чётными значениями
-        //List<Student> evenStudents = new ArrayList<>();
-        StudentsList evenStudents = new StudentsList();
-        for (Student s : student) {
-            if (s.getGradebookNumber() % 2 == 0) {
-                evenStudents.add(s);
-            }
-        }
-
-        //Сортировка только чётных значений
-        sortedGradebookNumber(evenStudents);
-
-        //Замена чётных значений в основном списке на отсортированные чётные значения
-        int evenIndex = 0;
-        for (int i = 0; i < student.size(); i++) {
-            if (student.get(i).getGradebookNumber() % 2 == 0) {
-                student.set(i, evenStudents.get(evenIndex));
-                evenIndex++;
-            }
-        }
-
-        Student_list2.forEach(System.out::println);
-        System.out.println("\nДанные отсортированы по дополнительному заданию №1\n");
-
     }
 
     // Метод по сортировки студенческих
@@ -181,4 +98,64 @@ public class SortedClass implements SortProcessor {
         }
     }
 
+    @Override
+    public void sortedGradeEvenOnly(StudentsList list) {
+        StudentsList evenStudents = new StudentsList();
+        for (Student s : list) {
+            if ((int) s.getGrade() % 2 == 0) {
+                evenStudents.add(s);
+            }
+        }
+
+        evenStudents = bubbleSort(
+                evenStudents,
+                (a, b) -> Double.compare(b.getGrade(), a.getGrade())
+        );
+
+        int index = 0;
+        for (int i = 0; i < list.size(); i++) {
+            if ((int) list.get(i).getGrade() % 2 == 0) {
+                list.set(i, evenStudents.get(index++));
+            }
+        }
+    }
+
+    @Override
+    public void sortedGradebookNumberEvenOnly(StudentsList list) {
+        StudentsList evenStudents = new StudentsList();
+        for (Student s : list) {
+            if (s.getGradebookNumber() % 2 == 0) {
+                evenStudents.add(s);
+            }
+        }
+
+        evenStudents = bubbleSort(
+                evenStudents,
+                Comparator.comparingInt(Student::getGradebookNumber)
+        );
+
+        int index = 0;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getGradebookNumber() % 2 == 0) {
+                list.set(i, evenStudents.get(index++));
+            }
+        }
+    }
+
+    private StudentsList bubbleSort(StudentsList list, Comparator<Student> comparator) {
+        StudentsList sorted = new StudentsList(list);
+        boolean swapped;
+        do {
+            swapped = false;
+            for (int i = 0; i < sorted.size() - 1; i++) {
+                if (comparator.compare(sorted.get(i), sorted.get(i + 1)) > 0) {
+                    Student temp = sorted.get(i);
+                    sorted.set(i, sorted.get(i + 1));
+                    sorted.set(i + 1, temp);
+                    swapped = true;
+                }
+            }
+        } while (swapped);
+        return sorted;
+    }
 }
