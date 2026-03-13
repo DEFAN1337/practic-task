@@ -59,42 +59,28 @@ public class SortedClass implements SortProcessor {
     // Метод по сортировки оценок
     @Override
     public void sortedGrade(StudentsList list) {
-        int n = list.size();
-        // блок сортировки по оценке
-        boolean is_Sorted = false;
-        while (!is_Sorted){
-            is_Sorted =true;
-            for (int i = 0; i < n - 1; i++) {
-                // Сравнение параметра Grade
-                if (list.get(i).getGrade() < list.get(i + 1).getGrade()) {
-                    // swap
-                    Student temp = list.get(i);
-                    list.set(i, list.get(i + 1));
-                    list.set(i + 1, temp);
-                    is_Sorted = false;
-                }
-            }
+
+        StudentsList sorted = bubbleSort(
+                list,
+                (a, b) -> Double.compare(b.getGrade(), a.getGrade())
+        );
+
+        for (int i = 0; i < list.size(); i++) {
+            list.set(i, sorted.get(i));
         }
     }
 
     // Метод по сортировки студенческих
     @Override
     public void sortedGradebookNumber(StudentsList list) {
-        int n = list.size();
-        // блок сортировки по оценке
-        boolean is_Sorted = false;
-        while (!is_Sorted){
-            is_Sorted =true;
-            for (int i = 0; i < n - 1; i++) {
-                // Сравнение параметра Grade
-                if (list.get(i).getGradebookNumber() > list.get(i + 1).getGradebookNumber()) {
-                    // swap
-                    Student temp = list.get(i);
-                    list.set(i, list.get(i + 1));
-                    list.set(i + 1, temp);
-                    is_Sorted = false;
-                }
-            }
+
+        StudentsList sorted = bubbleSort(
+                list,
+                Comparator.comparingInt(Student::getGradebookNumber)
+        );
+
+        for (int i = 0; i < list.size(); i++) {
+            list.set(i, sorted.get(i));
         }
     }
 
