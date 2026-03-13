@@ -92,4 +92,34 @@ public final class StudentValidator {
             );
         }
     }
+
+    public static boolean isValidName(String name) {
+        if (name == null) {
+            return false;
+        }
+
+        String normalizedName = name.trim().replaceAll("\\s+", " ");
+
+        int length = normalizedName.length();
+
+        if (length < MIN_NAME_LENGTH || length > MAX_NAME_LENGTH) {
+            return false;
+        }
+
+        return studentNamePattern.matcher(normalizedName).matches();
+    }
+
+    public static boolean isValidGrade(double grade) {
+
+        if (Double.isNaN(grade) || Double.isInfinite(grade)) {
+            return false;
+        }
+
+        return grade >= 2.0 && grade <= 5.0;
+    }
+
+    public static boolean isValidGradebookNumber(int gradebookNumber) {
+
+        return gradebookNumber >= 100000 && gradebookNumber <= 999999;
+    }
 }
