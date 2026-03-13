@@ -9,85 +9,64 @@ import java.util.Comparator;
 public class SortedClass implements SortProcessor {
 
     @Override
-    public void sortedName(StudentsList student) {
+    public void sortedName(StudentsList studentsList) {
 
         System.out.println();
 
-        // Сортировка по алфавиту
-        boolean is_Sorted = false;
-        while (!is_Sorted) {
-            is_Sorted = true;
-            for (int i = 0; i < student.size() - 1; i++) {
-                String name1 = student.get(i).getName();
-                String name2 = student.get(i + 1).getName();
-                int lim = Math.min(name1.length(), name2.length());
-                int k = 0;
+        StudentsList sorted = bubbleSort(
+                studentsList,
+                (a, b) -> a.getName().compareTo(b.getName())
+        );
 
-                while (k < lim) {
-                    if (name1.charAt(k) != name2.charAt(k)) {
-
-                        // swap (перестановка)
-                        if (name1.charAt(k) > name2.charAt(k)) {
-                            Student temp = student.get(i);
-                            student.set(i, student.get(i + 1));
-                            student.set(i + 1, temp);
-                            is_Sorted = false;
-                        }
-                        break;
-                    }
-                    k++;
-                }
-
-                // Сортировка по длине имени
-                if (k == lim && name1.length() > name2.length()){
-                    Student temp = student.get(i);
-                    student.set(i, student.get(i + 1));
-                    student.set(i + 1, temp);
-                    is_Sorted = false;
-                }
-
-            }
-
+        for (int i = 0; i < studentsList.size(); i++) {
+            studentsList.set(i, sorted.get(i));
         }
 
-        student.forEach(System.out::println);
-        System.out.println("\nДанные отсортированы по имени");
-
+        System.out.println("------------------Список отсортированных студентов:-----------------");
+        studentsList.forEach(System.out::println);
     }
 
 
-    // Метод по сортировки оценок
     @Override
-    public void sortedGrade(StudentsList list) {
+    public void sortedGrade(StudentsList studentsList) {
+
+        System.out.println();
 
         StudentsList sorted = bubbleSort(
-                list,
+                studentsList,
                 (a, b) -> Double.compare(b.getGrade(), a.getGrade())
         );
 
-        for (int i = 0; i < list.size(); i++) {
-            list.set(i, sorted.get(i));
+        for (int i = 0; i < studentsList.size(); i++) {
+            studentsList.set(i, sorted.get(i));
         }
+
+        System.out.println("------------------Список отсортированных студентов:-----------------");
+        studentsList.forEach(System.out::println);
     }
 
-    // Метод по сортировки студенческих
     @Override
-    public void sortedGradebookNumber(StudentsList list) {
+    public void sortedGradebookNumber(StudentsList studentsList) {
 
         StudentsList sorted = bubbleSort(
-                list,
+                studentsList,
                 Comparator.comparingInt(Student::getGradebookNumber)
         );
 
-        for (int i = 0; i < list.size(); i++) {
-            list.set(i, sorted.get(i));
+        for (int i = 0; i < studentsList.size(); i++) {
+            studentsList.set(i, sorted.get(i));
         }
+
+        System.out.println("------------------Список отсортированных студентов:-----------------");
+        studentsList.forEach(System.out::println);
     }
 
     @Override
-    public void sortedGradeEvenOnly(StudentsList list) {
+    public void sortedGradeEvenOnly(StudentsList studentsList) {
+
         StudentsList evenStudents = new StudentsList();
-        for (Student s : list) {
+
+        for (Student s : studentsList) {
             if ((int) s.getGrade() % 2 == 0) {
                 evenStudents.add(s);
             }
@@ -99,17 +78,22 @@ public class SortedClass implements SortProcessor {
         );
 
         int index = 0;
-        for (int i = 0; i < list.size(); i++) {
-            if ((int) list.get(i).getGrade() % 2 == 0) {
-                list.set(i, evenStudents.get(index++));
+        for (int i = 0; i < studentsList.size(); i++) {
+            if ((int) studentsList.get(i).getGrade() % 2 == 0) {
+                studentsList.set(i, evenStudents.get(index++));
             }
         }
+
+        System.out.println("------------------Список отсортированных студентов:-----------------");
+        studentsList.forEach(System.out::println);
     }
 
     @Override
-    public void sortedGradebookNumberEvenOnly(StudentsList list) {
+    public void sortedGradebookNumberEvenOnly(StudentsList studentsList) {
+
         StudentsList evenStudents = new StudentsList();
-        for (Student s : list) {
+
+        for (Student s : studentsList) {
             if (s.getGradebookNumber() % 2 == 0) {
                 evenStudents.add(s);
             }
@@ -121,15 +105,20 @@ public class SortedClass implements SortProcessor {
         );
 
         int index = 0;
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getGradebookNumber() % 2 == 0) {
-                list.set(i, evenStudents.get(index++));
+        for (int i = 0; i < studentsList.size(); i++) {
+            if (studentsList.get(i).getGradebookNumber() % 2 == 0) {
+                studentsList.set(i, evenStudents.get(index++));
             }
         }
+
+        System.out.println("------------------Список отсортированных студентов:-----------------");
+        studentsList.forEach(System.out::println);
     }
 
-    private StudentsList bubbleSort(StudentsList list, Comparator<Student> comparator) {
-        StudentsList sorted = new StudentsList(list);
+    private StudentsList bubbleSort(StudentsList studentsList, Comparator<Student> comparator) {
+
+        StudentsList sorted = new StudentsList(studentsList);
+
         boolean swapped;
         do {
             swapped = false;
@@ -142,6 +131,7 @@ public class SortedClass implements SortProcessor {
                 }
             }
         } while (swapped);
+
         return sorted;
     }
 }

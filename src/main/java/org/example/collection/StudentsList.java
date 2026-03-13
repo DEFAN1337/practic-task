@@ -198,4 +198,14 @@ implements List<Student>, RandomAccess, Cloneable, java.io.Serializable, Iterabl
         sorter.sortedGradebookNumber(this);
         isSorted = true;
     }
+
+    public void sortByEvenGrade() {
+        sorter.sortedGradeEvenOnly(this);
+        isSorted = true;
+    }
+
+    public void sortByEvenNumberGradebook() {
+        sorter.sortedGradebookNumberEvenOnly(this);
+        isSorted = true;
+    }
 }

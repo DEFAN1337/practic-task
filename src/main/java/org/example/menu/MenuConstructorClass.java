@@ -10,20 +10,29 @@ import org.example.thread.TypeFindData;
 
 import java.util.Scanner;
 
+import org.example.validation.StudentValidator;
+
 public class MenuConstructorClass {
+
     private final Scanner scanner = new Scanner(System.in);
 
     private final FileManager fileManager = new FileManager();
 
+    private final ReadFileClass readFileClass = new ReadFileClass();
+
     private StudentsList studentsList = new StudentsList();
-    private ReadFileClass readFileClass = new ReadFileClass();
 
     public void start() {
+
         boolean running = true;
+
         while (running) {
+
             printMainMenu();
             String command = scanner.nextLine();
+
             switch (command) {
+
                 case "manual_input" -> manualInput();
                 case "random_input" -> randomInput();
                 case "file_input" -> selectFileMenu();
@@ -53,45 +62,58 @@ public class MenuConstructorClass {
             }
         }
     }
-    //ручной ввод данных
+
     private void manualInput() {
 
         System.out.println("Введите количество студентов:");
-        int count = readInt();
 
+        int count = readInt();
         WriteFileClass writer = new WriteFileClass();
+
         studentsList.clear();
         studentsList = writer.writeDataStudent(count);
+
         System.out.println("---------------------Список введенных студентов:--------------------");
         studentsList.forEach(System.out::println);
     }
-    //генерация данных
+
     private void randomInput() {
 
         System.out.println("Введите количество студентов:");
-        int count = readInt();
 
+        int count = readInt();
         RandomFileClass generator = new RandomFileClass();
+
         studentsList.clear();
         studentsList = generator.generate(count);
+
+        System.out.println("------------------Список сгенерированных студентов:-----------------");
         studentsList.forEach(System.out::println);
     }
-    //выбор файла для считывания
-    private void selectFileMenu(){
+
+    private void selectFileMenu() {
+
         studentsList.clear();
+
         while (studentsList.isEmpty()) {
+
             printSelectFileMenu();
-            System.out.println("Введите команду:");
             String command = scanner.nextLine();
+
             switch (command) {
-                case "defailt" -> fileInput("students.txt");
-                case "castom" -> {
+
+                case "default" -> fileInput("students.txt");
+                case "custom" -> {
+
                     System.out.println("Введите имя файла для ввода:");
                     String fileName = scanner.nextLine();
+
                     while (!fileManager.isHaveFile(fileName)){
+
                         System.err.print("Ошибка! Такого файла не существует. Попробуйте еще раз:");
                         fileName = scanner.nextLine();
                     }
+
                     fileInput(fileName);
                 }
                 case "back" -> {
@@ -103,34 +125,25 @@ public class MenuConstructorClass {
         }
 
     }
-    //отображение меню для считывания
-    private  void printSelectFileMenu(){
-        System.out.println("""
-                    Меню ' Выбор файла для считывания'
-                    'defailt' - для выбора файла по умолчанию
-                    'castom'  - для ввода наименования своего файла
-                    'back'    - вернуться в главное меню
-                    'quit'    - закрыть приложение
-                    """);
-    }
-    //считывание данных из файла
+
     private void fileInput(String fileName) {
-
-        //ReadFileClass readFileClass = new ReadFileClass();
-
-        //System.out.println("Введите имя файла для ввода:");
-        //String fileName = scanner.nextLine();
 
         System.out.println("Введите количество студентов. Для отбора всех данных введите -1:");
         int count = readInt();
+
         try {
+
             studentsList = readFileClass.readFile(fileName, count);
+
+            System.out.println("------------------Список введенных студентов:-----------------");
+            studentsList.forEach(System.out::println);
         } catch (RuntimeException e) {
+
             System.out.println(e.getMessage());
         }
 
     }
-    //сортировка данных
+
     private void sortMenu() {
 
         while (true) {
@@ -143,6 +156,8 @@ public class MenuConstructorClass {
                 case "sort_name" -> studentsList.sortByName();
                 case "sort_grade" -> studentsList.sortByGrade();
                 case "sort_gradebook" -> studentsList.sortByNumberGradebook();
+                case "sort_even_grade" -> studentsList.sortByEvenGrade();
+                case "sort_even_gradebook" -> studentsList.sortByEvenNumberGradebook();
                 case "back" -> {
                     return;
                 }
@@ -151,13 +166,12 @@ public class MenuConstructorClass {
             }
         }
     }
-    //поиск данных
+
     private void findData() {
 
         while (true) {
 
             printSearchMenu();
-
             String command = scanner.nextLine();
 
             switch (command) {
@@ -176,17 +190,18 @@ public class MenuConstructorClass {
 
     private void findByName() {
 
-        System.out.println("Введите имя студента:");
-
+        System.out.println("Введите имя:");
         String name = scanner.nextLine();
 
-        while (!name.matches("^[a-zA-Zа-яА-ЯёЁ]+$")) {
-            System.out.println("Неправильное имя. Введите имя студента:");
+        while (!StudentValidator.isValidName(name)) {
+            System.out.println("Неправильное имя. Попробуйте снова.");
             name = scanner.nextLine();
         }
 
+        String normalizedName = name.trim().replaceAll("\\s+", " ");
+
         FindThreadClass thread =
-                new FindThreadClass(TypeFindData.Name, studentsList, name);
+                new FindThreadClass(TypeFindData.Name, studentsList, normalizedName);
 
         thread.startThread();
     }
@@ -194,10 +209,9 @@ public class MenuConstructorClass {
     private void findByGrade() {
 
         System.out.println("Введите оценку:");
+        double grade = readInt();
 
-        int grade = readInt();
-
-        while (grade < 2 || grade > 5) {
+        while (!StudentValidator.isValidGrade(grade)) {
             System.out.println("Оценка должна быть от 2 до 5:");
             grade = readInt();
         }
@@ -211,23 +225,21 @@ public class MenuConstructorClass {
     private void findByGradebook() {
 
         System.out.println("Введите номер зачётки (6 цифр):");
+        int gradebookNumber = readInt();
 
-        String input = scanner.nextLine();
-
-        while (!input.matches("[1-9][0-9]{5}")) {
+        while (!StudentValidator.isValidGradebookNumber(gradebookNumber)) {
             System.out.println("Номер должен содержать 6 цифр:");
-            input = scanner.nextLine();
+            gradebookNumber = readInt();
         }
 
-        int number = Integer.parseInt(input);
-
         FindThreadClass thread =
-                new FindThreadClass(TypeFindData.NumberGradeBook, studentsList, number);
+                new FindThreadClass(TypeFindData.NumberGradeBook, studentsList, gradebookNumber);
 
         thread.startThread();
     }
 
     private void saveData() {
+
         String nameFileToSave = "";
         //признак, если файл существует, то дописать к нему
         //true - дописываем в конец файла
@@ -235,11 +247,15 @@ public class MenuConstructorClass {
         boolean isWriteNewFile = false;
 
         while (nameFileToSave.isEmpty()){
+
             printMenuSave();
             String command = scanner.nextLine();
+
             System.out.println("Введите имя файла:");
             nameFileToSave = scanner.nextLine();
+
             switch (command) {
+
                 case "append"->{
                     isAppend=true;
                     isWriteNewFile=false;
@@ -253,22 +269,37 @@ public class MenuConstructorClass {
                     isWriteNewFile=true;
                 }
             }
+
             fileManager.writeDataInFile(studentsList, nameFileToSave, isAppend, isWriteNewFile);
             studentsList.clear();
         }
     }
-    private  void printMenuSave(){
+
+    private void printSelectFileMenu(){
         System.out.println(
                 """
-                Меню 'Cохранение данных'
-                'append'  - дозаписать в существующий файл
-                'rewrite' - перезаписать существующий файл
-                'new'     - записать в новый файл
-                'back'    - вернуться в главное меню
-                'quit'    - закрыть приложение
+                Меню 'Выбор файла для считывания'
+                default - для выбора файла по умолчанию
+                custom  - для ввода наименования своего файла
+                back    - вернуться в главное меню
+                quit    - закрыть приложение
                 """
         );
     }
+
+    private void printMenuSave(){
+        System.out.println(
+                """
+                Меню 'Cохранение данных'
+                append  - дозаписать в существующий файл
+                rewrite - перезаписать существующий файл
+                new     - записать в новый файл
+                back    - вернуться в главное меню
+                quit    - закрыть приложение
+                """
+        );
+    }
+
     private void printMainMenu() {
         System.out.println(
                 """
@@ -288,11 +319,13 @@ public class MenuConstructorClass {
         System.out.println(
                 """
                 Меню 'Сортировка данных'
-                sort_name       - сортировка по имени
-                sort_grade      - сортировка по среднему баллу
-                sort_gradebook  - сортировка по номеру зачетки
-                back            - вернуться в главное меню
-                quit            - закрыть приложение
+                sort_name           - сортировка по имени
+                sort_grade          - сортировка по среднему баллу
+                sort_gradebook      - сортировка по номеру зачетки
+                sort_even_grade     - сортировка по среднему баллу по доп заданию
+                sort_even_gradebook - сортировка по номеру зачетки по доп заданию
+                back                - вернуться в главное меню
+                quit                - закрыть приложение
                 """
         );
     }

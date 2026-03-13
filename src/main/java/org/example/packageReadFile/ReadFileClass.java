@@ -25,7 +25,6 @@ public class ReadFileClass {
         }
 
         if(count == -1) {
-            buffer.forEach(System.out::println);
             return buffer;
         }else {
             if (count > buffer.size()) {
@@ -39,8 +38,6 @@ public class ReadFileClass {
             */
             //заполнение коллекции через стрим (мне кажется так получше будет)
             buffer.stream().limit(count).forEach(result::add);
-
-            result.forEach(System.out::println);
 
             return result;
         }
