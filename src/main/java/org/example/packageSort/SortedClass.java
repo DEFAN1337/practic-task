@@ -56,17 +56,18 @@ public class SortedClass implements SortProcessor {
 
     }
 
-    @Override
-    public void sortedGrade(StudentsList student) {
+
+    public void sorted_Grade(StudentsList student) {
 
         System.out.println();
-
+        student.forEach(System.out::println);
+        System.out.println("\nПолученные данные\n");
 
         //Студенты все
         //List<Student> Student_list1 = new ArrayList<>(student);
         StudentsList Student_list1 = new StudentsList(student);
         //Сортировка
-        Sort_Grade(Student_list1);
+        sortedGrade(Student_list1);
         Student_list1.forEach(System.out::println);
         System.out.println("\nДанные отсортированы по оценочному баллу\n");
 
@@ -83,7 +84,7 @@ public class SortedClass implements SortProcessor {
         }
 
         //Сортировка только чётных значений
-        Sort_Grade(evenStudents);
+        sortedGrade(evenStudents);
         //Замена чётных значений в основном списке на отсортированные чётные значения
         int evenIndex = 0;
         for (int i = 0; i < student.size(); i++) {
@@ -97,7 +98,8 @@ public class SortedClass implements SortProcessor {
     }
 
     // Метод по сортировки оценок
-    private void Sort_Grade(StudentsList list) {
+    @Override
+    public void sortedGrade(StudentsList list) {
         int n = list.size();
         // блок сортировки по оценке
         boolean is_Sorted = false;
@@ -116,16 +118,15 @@ public class SortedClass implements SortProcessor {
         }
     }
 
-    @Override
-    public void sortedGradebookNumber(StudentsList student) {
+
+    public void Sort_GradebookNumber(StudentsList student) {
 
         System.out.println();
-       
 
         //Студенты все
         StudentsList Student_list1 = new StudentsList(student);
         //Сортировка
-        Sort_GradebookNumber(Student_list1);
+        sortedGradebookNumber(Student_list1);
         Student_list1.forEach(System.out::println);
         System.out.println("\nДанные отсортированы по номеру студенческого билета\n");
 
@@ -143,7 +144,7 @@ public class SortedClass implements SortProcessor {
         }
 
         //Сортировка только чётных значений
-        Sort_GradebookNumber(evenStudents);
+        sortedGradebookNumber(evenStudents);
 
         //Замена чётных значений в основном списке на отсортированные чётные значения
         int evenIndex = 0;
@@ -160,7 +161,8 @@ public class SortedClass implements SortProcessor {
     }
 
     // Метод по сортировки студенческих
-    private void Sort_GradebookNumber(StudentsList list) {
+    @Override
+    public void sortedGradebookNumber(StudentsList list) {
         int n = list.size();
         // блок сортировки по оценке
         boolean is_Sorted = false;
@@ -168,7 +170,7 @@ public class SortedClass implements SortProcessor {
             is_Sorted =true;
             for (int i = 0; i < n - 1; i++) {
                 // Сравнение параметра Grade
-                if (list.get(i).getGradebookNumber() < list.get(i + 1).getGradebookNumber()) {
+                if (list.get(i).getGradebookNumber() > list.get(i + 1).getGradebookNumber()) {
                     // swap
                     Student temp = list.get(i);
                     list.set(i, list.get(i + 1));
