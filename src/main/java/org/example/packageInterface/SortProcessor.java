@@ -12,4 +12,8 @@ public interface SortProcessor {
     void sortedGrade(StudentsList student);
 
     void sortedGradebookNumber(StudentsList student);
+
+    void sortedGradeEvenOnly(StudentsList list);
+
+    void sortedGradebookNumberEvenOnly(StudentsList list);
 }
